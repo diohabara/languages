@@ -141,3 +141,7 @@ Program terminated with signal SIGSEGV, Segmentation fault.
 ## Day4
 
 - スタックマシンについて実装完了
+
+## Day5
+
+- めっちゃ久々にやる(@2020/03/10)
