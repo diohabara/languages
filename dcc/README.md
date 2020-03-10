@@ -155,4 +155,3 @@ Program terminated with signal SIGSEGV, Segmentation fault.
   - 文法の通りに実装すれば良いだけだった(の割に時間がかかった…)
   - 次は分割コンパイルとリンク
     - 流石にコードが大きくなっていたのでありがたい．
-  - 
