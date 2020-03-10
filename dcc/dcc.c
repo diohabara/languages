@@ -26,6 +26,7 @@ struct Token {
   Token* next;     // next token
   int val;         // if TK_NUM -> the value
   char* str;       // token string
+  int len;         // the length of token
 };
 // kinds of nodes of AST
 typedef enum {
@@ -117,9 +118,10 @@ void error(char* fmt, ...) {
 // read a token if the next token is an expected one
 // if so return true otherwise false
 bool consume(char op) {
-  if (token->kind != TK_RESERVED || token->str[0] != op) {
+  if (token->kind != TK_RESERVED || strlen(op) != token->len ||
+      memcmp(token->str, op, token->len))
     return false;
-  }
+
   token = token->next;
   return true;
 }
@@ -127,18 +129,16 @@ bool consume(char op) {
 // read a token if the next token is an expected one
 // otherwise alert error
 void expect(char op) {
-  if (token->kind != TK_RESERVED || token->str[0] != op) {
+  if (token->kind != TK_RESERVED || token->str[0] != op)
     error_at(token->str, "is not %s", op);
-  }
   token = token->next;
 }
 
 // read a token and return the number if the next token is number
 // otherwise alert error
 int expect_number(void) {
-  if (token->kind != TK_NUM) {
-    error_at(token->str, "is not number");
-  }
+  if (token->kind != TK_NUM) error_at(token->str, "is not number");
+
   int val = token->val;
   token = token->next;
   return val;
@@ -205,13 +205,12 @@ Node* expr(void) {
   Node* node = mul();
 
   for (;;) {
-    if (consume('+')) {
+    if (consume('+'))
       node = new_node(ND_ADD, node, mul());
-    } else if (consume('-')) {
+    else if (consume('-'))
       node = new_node(ND_SUB, node, mul());
-    } else {
+    else
       return node;
-    }
   }
 }
 
@@ -219,23 +218,18 @@ Node* mul(void) {
   Node* node = unary();
 
   for (;;) {
-    if (consume('*')) {
+    if (consume('*'))
       node = new_node(ND_MUL, node, unary());
-    } else if (consume('/')) {
+    else if (consume('/'))
       node = new_node(ND_DIV, node, unary());
-    } else {
+    else
       return node;
-    }
   }
 }
 
 Node* unary(void) {
-  if (consume('+')) {
-    return primary();
-  }
-  if (consume('-')) {
-    return new_node(ND_SUB, new_node_num(0), primary());
-  }
+  if (consume('+')) return primary();
+  if (consume('-')) return new_node(ND_SUB, new_node_num(0), primary());
   return primary();
 }
 

@@ -145,3 +145,9 @@ Program terminated with signal SIGSEGV, Segmentation fault.
 ## Day5
 
 - めっちゃ久々にやる(@2020/03/10)
+- step5をやる
+  - 終わった．読むだけ
+- step6をやる
+  - 単項演算子だった．ここまで前もやったな．
+- step7をやる
+  - 比較演算子っぽい．
