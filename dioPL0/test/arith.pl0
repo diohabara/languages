@@ -1,0 +1,16 @@
+begin
+    write(10^0); # 1
+    writeln;
+    write(1+1); # 2
+    writeln;
+    write(5-2); # 3
+    writeln;
+    write(1*4); # 4
+    writeln;
+    write(10/2); # 5
+    writeln;
+    write(20%7); # 6
+    writeln;
+    write(7^2); # 49
+    writeln;
+end.

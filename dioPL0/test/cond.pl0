@@ -1,0 +1,19 @@
+var x, y, cnt;
+var a;
+begin
+    if 0 < 1 then write(1000); # 1000
+    writeln;
+
+    x := 2;
+    y := 100;
+    cnt := 0
+    while x<=y do
+        begin
+        x := x^2;
+        cnt := cnt+1;
+        write(cnt); # 1, 2, 3
+        writeln;
+        end
+    write(x); # 256
+    writeln;
+end.

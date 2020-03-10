@@ -1,0 +1,12 @@
+function fact(n)
+    var a;
+begin a := n;
+    begin if a = 1 then return 1;
+        return a * fact(a - 1)
+    end;
+end;
+
+begin
+    write fact(5); # 120
+    writeln;
+end.

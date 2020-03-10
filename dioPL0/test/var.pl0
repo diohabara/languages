@@ -1,0 +1,17 @@
+var a, b, c;
+begin
+    a := 1;
+    b := 2;
+    c := a+b;
+    write(c); # 3
+    writeln;
+end;
+
+const m=9, n=3;
+var x, y;
+begin
+    x := m;
+    y := n;
+    write(x+y);
+    writeln;
+end.

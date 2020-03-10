@@ -1,0 +1,5 @@
+.vscode
+a.out
+*.o
+./test/*.html
+diopl0
