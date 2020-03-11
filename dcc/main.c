@@ -1,5 +1,8 @@
 #include "dcc.h"
 
+Token* token;
+char* user_input;
+
 int main(int argc, char** argv) {
   if (argc != 2) {
     error("the number of arguments is supposed to be ONE");

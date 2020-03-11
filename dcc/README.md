@@ -165,3 +165,5 @@ Program terminated with signal SIGSEGV, Segmentation fault.
   - ファイルの分割をする
     - した
   - 次はMakefileを作る
+    - 書き換えた
+  - 宣言だけして，定義をしていなかったのでその部分を直した
