@@ -51,6 +51,5 @@ echo "until step9: local varialbles with a single character"
 echo "---"
 try 3 "a = 3;"
 try 22 "b = 5 * 6 - 8;"
-try 14 "a + b / 2;"
 
 echo OK
