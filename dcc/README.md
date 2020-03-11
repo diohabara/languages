@@ -155,3 +155,13 @@ Program terminated with signal SIGSEGV, Segmentation fault.
   - 文法の通りに実装すれば良いだけだった(の割に時間がかかった…)
   - 次は分割コンパイルとリンク
     - 流石にコードが大きくなっていたのでありがたい．
+- step8
+  - ファイルの分割とMakefileの変更をするっぽい
+  - 変更をしていく
+
+## Day6
+
+- step8
+  - ファイルの分割をする
+    - した
+  - 次はMakefileを作る

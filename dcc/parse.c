@@ -1,9 +1,4 @@
-#include <ctype.h>
-#include <stdarg.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "dcc.h"
 
 /** Grammar
  *expr       = equality
@@ -14,92 +9,6 @@
  *unary      = ("+" | "-")? primary
  *primary    = num | "(" expr ")"
  **/
-
-// types of tokens
-typedef enum {
-  TK_RESERVED,  // sign
-  TK_NUM,       // integer
-  TK_EOF,       // end of line
-} TokenKind;
-typedef struct Token Token;
-typedef struct Node Node;
-// Token
-struct Token {
-  TokenKind kind;  // type of token
-  Token* next;     // next token
-  int val;         // if TK_NUM -> the value
-  char* str;       // token string
-  int len;         // the length of token
-};
-// kinds of nodes of AST
-typedef enum {
-  ND_ADD,  // +
-  ND_SUB,  // -
-  ND_MUL,  // *
-  ND_DIV,  // /
-  ND_NUM,  // integer
-  ND_EQ,   // ==
-  ND_NE,   // !=
-  ND_LT,   // <
-  ND_LE,   // <=
-} NodeKind;
-// types of nodes of AST
-struct Node {
-  NodeKind kind;  // type of Node
-  Node* lhs;      // left hand side
-  Node* rhs;      // right hand side
-  int val;
-};
-// current token
-Token* token;
-// input program
-char* user_input;
-
-// prototype declaration
-void error_at(char* loc, char* fmt, ...);
-void error(char* fmt, ...);
-bool consume(char* op);
-void expect(char* op);
-int expect_number(void);
-bool at_eof(void);
-Token* new_token(TokenKind kind, Token* cur, char* str, int len);
-Token* tokenize(char* p);
-Node* new_node(NodeKind kind, Node* lhs, Node* rhs);
-Node* new_node_num(int val);
-Node* expr(void);
-Node* equality(void);
-Node* relational(void);
-Node* add(void);
-Node* mul(void);
-Node* unary(void);
-Node* primary(void);
-
-void gen(Node* node);
-bool startsWith(char* p, char* q);
-
-int main(int argc, char** argv) {
-  if (argc != 2) {
-    error("the number of arguments is supposed to be ONE");
-    return 1;
-  }
-
-  // tokenize and parse
-  user_input = argv[1];
-  token = tokenize(user_input);
-  Node* node = expr();
-
-  // the first part of assembly
-  printf(".intel_syntax noprefix\n");
-  printf(".global main\n");
-  printf("main:\n");
-
-  // generate code through AST
-  gen(node);
-
-  printf("  pop rax\n");
-  printf("  ret\n");
-  return 0;
-}
 
 // report where the error is
 void error_at(char* loc, char* fmt, ...) {
@@ -301,54 +210,4 @@ Node* primary(void) {
   }
 
   return new_node_num(expect_number());
-}
-
-void gen(Node* node) {
-  if (node->kind == ND_NUM) {
-    printf("  push %d\n", node->val);
-    return;
-  }
-
-  gen(node->lhs);
-  gen(node->rhs);
-
-  printf("  pop rdi\n");
-  printf("  pop rax\n");
-
-  switch (node->kind) {
-    case ND_ADD:
-      printf("  add rax, rdi\n");
-      break;
-    case ND_SUB:
-      printf("  sub rax, rdi\n");
-      break;
-    case ND_MUL:
-      printf("  imul rax, rdi\n");
-      break;
-    case ND_DIV:
-      printf("  cqo\n");
-      printf("  idiv rdi\n");
-      break;
-    case ND_EQ:
-      printf("  cmp rax, rdi\n");
-      printf("  sete al\n");
-      break;
-    case ND_NE:
-      printf("  cmp rax, rdi\n");
-      printf("  setne al\n");
-      printf("  movzb rax, al\n");
-      break;
-    case ND_LT:
-      printf("  cmp rax, rdi\n");
-      printf("  setl al\n");
-      printf("  movzb rax, al\n");
-      break;
-    case ND_LE:
-      printf("  cmp rax, rdi\n");
-      printf("  setle al\n");
-      printf("  movzb rax, al\n");
-      break;
-  }
-
-  printf("  push rax\n");
 }
