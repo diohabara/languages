@@ -13,56 +13,6 @@
  * primary    = num | ident | "(" expr ")"
  **/
 
-// read a token if the next token is an expected one
-// if so return true otherwise false
-bool consume(char* op) {
-  if (token->kind != TK_RESERVED || strlen(op) != token->len ||
-      memcmp(token->str, op, token->len))
-    return false;
-
-  token = token->next;
-  return true;
-}
-
-// read a token if the next token is an expected one
-// if so return the next Token
-// otherwise, return NULL
-Token* consume_ident() {
-  if (token->kind != TK_IDENT) return NULL;
-
-  Token* cur = token;
-  token = token->next;
-  return cur;
-}
-
-// read a token if the next token is an expected one
-// otherwise alert error
-void expect(char* op) {
-  if (token->kind != TK_RESERVED || strlen(op) != token->len ||
-      memcmp(token->str, op, token->len))
-    error_at(token->str, "is not %s", op);
-  token = token->next;
-}
-
-// read a token and return the number if the next token is number
-// otherwise alert error
-int expect_number(void) {
-  if (token->kind != TK_NUM) error_at(token->str, "is not number");
-
-  int val = token->val;
-  token = token->next;
-  return val;
-}
-
-bool at_eof(void) { return token->kind == TK_EOF; }
-
-LVar* find_lvar(Token* tok) {
-  for (LVar* var = locals; var; var = var->next)
-    if (var->len == tok->len && !memcmp(tok->str, var->name, var->len))
-      return var;
-  return NULL;
-}
-
 // tokenize input string p and return it
 void tokenize(char* p) {
   Token head;
