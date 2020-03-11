@@ -41,13 +41,15 @@ struct Node {
   NodeKind kind;  // type of Node
   Node* lhs;      // left hand side
   Node* rhs;      // right hand side
-  int val; // for ND_NUM
-  int offset; // ND_LVAR
+  int val;        // for ND_NUM
+  int offset;     // ND_LVAR
 };
 // current token
-extern Token* token;
+Token* token;
 // input program
-extern char* user_input;
+char* user_input;
+// array of codes
+Node* code[100];
 
 // prototype declaration
 void error_at(char* loc, char* fmt, ...);
@@ -58,10 +60,10 @@ int expect_number(void);
 bool at_eof(void);
 bool startsWith(char* p, char* q);
 Token* new_token(TokenKind kind, Token* cur, char* str, int len);
-Token* tokenize(char* p);
 Node* new_node(NodeKind kind, Node* lhs, Node* rhs);
 Node* new_node_num(int val);
-Node* program(void);
+void tokenize(char* p);
+void program(void);
 Node* stmt(void);
 Node* expr(void);
 Node* assign(void);

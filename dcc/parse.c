@@ -14,7 +14,7 @@
  **/
 
 // tokenize input string p and return it
-Token* tokenize(char* p) {
+void tokenize(char* p) {
   Token head;
   head.next = NULL;
   Token* cur = &head;
@@ -54,13 +54,11 @@ Token* tokenize(char* p) {
   }
 
   new_token(TK_EOF, cur, p, 0);
-  return head.next;
+  token = head.next;
 }
 
-Node* code[100];
-
 // program = stmt*
-Node* program(void) {
+void program(void) {
   int i = 0;
   while (!at_eof()) code[i++] = stmt();
   code[i] = NULL;

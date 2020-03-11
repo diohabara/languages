@@ -171,3 +171,7 @@ Program terminated with signal SIGSEGV, Segmentation fault.
   - ローカル変数を実装する
   - たぶん実装できた
   - 新しい文法まで出来たと思う
+  - 任意のアドレスから値をロードするらしい
+  - 次に式を左辺地として評価する関数を追加し，これによって右辺地に右辺値を代入することはなくなるっぽい
+  - `0; ^ cannot be tokenized`と出てくる
+  - どこかでtokenize出来ていないようだが，どこが原因なのか…
