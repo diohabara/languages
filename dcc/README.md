@@ -178,3 +178,19 @@ Program terminated with signal SIGSEGV, Segmentation fault.
   - 直った．`strchr`に`=;`を含めれば良いだけだった
 - step10
   - 複数文字ローカル変数(前回は1文字)の実装をする
+    - テストをするとstep9のassignmentが上手く行ってないので直す
+    - `segmentation fault`が消えない
+
+```sh
+./test.sh: line 2: 30572 Segmentation fault      (core dumped) ./dcc "$input" > tmp.s
+/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o: In function `_start':
+(.text+0x20): undefined reference to `main'
+collect2: error: ld returned 1 exit status
+./test.sh: line 8: ./tmp: No such file or directory
+a = 3; => 3 expected, but got 127
+Makefile:11: recipe for target 'test' failed
+make: *** [test] Error 1
+```
+
+- 無限にこのエラー文が出てくる
+- 諸々見直してみた．ただバグは直っていない．

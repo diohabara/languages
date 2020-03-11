@@ -26,11 +26,6 @@ void tokenize(char* p) {
       continue;
     }
 
-    if ('a' <= *p && *p <= 'z') {
-      cur = new_token(TK_IDENT, cur, p++, 1);
-      continue;
-    }
-
     if (startsWith(p, "==") || startsWith(p, "!=") || startsWith(p, "<=") ||
         startsWith(p, ">=")) {
       cur = new_token(TK_RESERVED, cur, p, 2);
@@ -38,7 +33,7 @@ void tokenize(char* p) {
       continue;
     }
 
-  if (strchr("+-*/()<>=;", *p)) {
+    if (strchr("+-*/()<>;=", *p)) {
       cur = new_token(TK_RESERVED, cur, p++, 1);
       continue;
     }
@@ -50,10 +45,16 @@ void tokenize(char* p) {
       cur->len = p - q;
       continue;
     }
+
+    if ('a' <= *p && *p <= 'z') {
+      cur = new_token(TK_IDENT, cur, p++, 1);
+      continue;
+    }
+
     error_at(p, "cannot be tokenized");
   }
 
-  new_token(TK_EOF, cur, p, 0);
+  cur = new_token(TK_EOF, cur, p, 0);
   token = head.next;
 }
 
@@ -148,17 +149,17 @@ Node* unary(void) {
 
 // primary = num | ident | "(" expr ")"
 Node* primary(void) {
-  if (consume("(")) {
-    Node* node = expr();
-    expect(")");
-    return node;
-  }
-
   Token* tok = consume_ident();
   if (tok) {
     Node* node = calloc(1, sizeof(Node));
     node->kind = ND_LVAR;
     node->offset = (tok->str[0] - 'a' + 1) * 8;
+    return node;
+  }
+
+  if (consume("(")) {
+    Node* node = expr();
+    expect(")");
     return node;
   }
 

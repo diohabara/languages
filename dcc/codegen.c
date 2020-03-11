@@ -23,7 +23,6 @@ void gen(Node* node) {
     case ND_ASSIGN:
       gen_lval(node->lhs);
       gen(node->rhs);
-
       printf("  pop rdi\n");
       printf("  pop rax\n");
       printf("  mov [rax], rdi\n");

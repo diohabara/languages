@@ -11,7 +11,7 @@ void error_at(char* loc, char* fmt, ...) {
   fprintf(stderr, "^ ");
   vfprintf(stderr, fmt, ap);
   fprintf(stderr, "\n");
-  // fprintf(stderr, "%s\n", loc);
+  fprintf(stderr, "%s\n", loc);
   exit(1);
 }
 
@@ -38,11 +38,13 @@ bool consume(char* op) {
 
 // read a token if the next token is an expected one
 // if so return the next Token
-Token* consume_ident(char* op) {
-  if (token->kind != TK_IDENT || strlen(op) != token->len ||
-      memcmp(token->str, op, token->len))
-    return NULL;
-  return token->next;
+// otherwise, return NULL
+Token* consume_ident() {
+  if (token->kind != TK_IDENT) return NULL;
+
+  Token* cur = token;
+  token = token->next;
+  return cur;
 }
 
 // read a token if the next token is an expected one

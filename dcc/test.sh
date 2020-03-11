@@ -16,7 +16,9 @@ try() {
   fi
 }
 
+echo "---"
 echo "until step6: plus, minus, cal, div, ()"
+echo "---"
 try 0 "0;"
 try 42 "42;"
 try 21 "5+20-4;"
@@ -26,7 +28,9 @@ try 15 "5*(9-6);"
 try 4 "(3+5)/2;"
 try 10 "-10+20;"
 
-echo "step7: relational"
+echo "---"
+echo "utntil step7: relational"
+echo "---"
 try 0 "0==1;"
 try 1 "0==0;"
 try 0 "1!=1;"
@@ -41,5 +45,12 @@ try 1 "1>0;"
 try 0 "0>=1;"
 try 1 "2>=1;"
 try 1 "1>=1;"
+
+echo "---"
+echo "until step9: local varialbles with a single character"
+echo "---"
+try 3 "a = 3;"
+try 22 "b = 5 * 6 - 8;"
+try 14 "a + b / 2;"
 
 echo OK

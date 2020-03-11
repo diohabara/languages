@@ -19,6 +19,7 @@ int main(int argc, char** argv) {
   printf("main:\n");
 
   // prologue
+  // store space for 26 variables
   printf("  push rbp\n");
   printf("  mov rbp, rsp\n");
   printf("  sub rsp, 208\n");
@@ -37,5 +38,6 @@ int main(int argc, char** argv) {
   printf("  mov rsp, rbp\n");
   printf("  pop rbp\n");
   printf("  ret\n");
+
   return 0;
 }
