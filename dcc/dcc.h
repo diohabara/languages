@@ -21,7 +21,7 @@ struct Token {
   char* str;       // token string
   int len;         // the length of token
 };
-// kinds of nodes of AST
+// a kind of nodes of AST
 typedef enum {
   ND_ADD,     // +
   ND_SUB,     // -
@@ -35,7 +35,7 @@ typedef enum {
   ND_LT,      // <
   ND_LE,      // <=
 } NodeKind;
-// types of nodes of AST
+// a type of nodes of AST
 typedef struct Node Node;
 struct Node {
   NodeKind kind;  // type of Node
@@ -44,14 +44,25 @@ struct Node {
   int val;        // for ND_NUM
   int offset;     // ND_LVAR
 };
+// a type of local variables
+typedef struct LVar LVar;
+struct LVar {
+  LVar* next;  // the next variable or NULL
+  char* name;  // the name of a variable
+  int len;     // the length of the name
+  int offset;  // offset from RBP
+};
 // current token
 Token* token;
 // input program
 char* user_input;
 // array of codes
 Node* code[100];
+// local variable
+LVar* locals;
 
 // prototype declaration
+/// @container.c
 void error_at(char* loc, char* fmt, ...);
 void error(char* fmt, ...);
 bool consume(char* op);
@@ -62,6 +73,8 @@ bool startsWith(char* p, char* q);
 Token* new_token(TokenKind kind, Token* cur, char* str, int len);
 Node* new_node(NodeKind kind, Node* lhs, Node* rhs);
 Node* new_node_num(int val);
+LVar* find_lvar(Token* tok);
+/// @parser.c
 void tokenize(char* p);
 void program(void);
 Node* stmt(void);
@@ -73,4 +86,6 @@ Node* add(void);
 Node* mul(void);
 Node* unary(void);
 Node* primary(void);
+// @codegen.c
+void gen_lval(Node* node);
 void gen(Node* node);
