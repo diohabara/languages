@@ -175,3 +175,6 @@ Program terminated with signal SIGSEGV, Segmentation fault.
   - 次に式を左辺地として評価する関数を追加し，これによって右辺地に右辺値を代入することはなくなるっぽい
   - `0; ^ cannot be tokenized`と出てくる
   - どこかでtokenize出来ていないようだが，どこが原因なのか…
+  - 直った．`strchr`に`=;`を含めれば良いだけだった
+- step10
+  - 複数文字ローカル変数(前回は1文字)の実装をする
