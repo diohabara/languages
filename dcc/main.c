@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
   // epilogue
   // the last result of the expression is in RAX
   printf("  mov rsp, rbp\n");
-  printf("  pop rax\n");
+  printf("  pop rbp\n");
   printf("  ret\n");
   return 0;
 }
