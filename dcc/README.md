@@ -167,3 +167,7 @@ Program terminated with signal SIGSEGV, Segmentation fault.
   - 次はMakefileを作る
     - 書き換えた
   - 宣言だけして，定義をしていなかったのでその部分を直した
+- step9
+  - ローカル変数を実装する
+  - たぶん実装できた
+  - 新しい文法まで出来たと思う
