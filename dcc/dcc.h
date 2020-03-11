@@ -53,13 +53,13 @@ struct LVar {
   int offset;  // offset from RBP
 };
 // current token
-Token* token;
+extern Token* token;
 // input program
-char* user_input;
+extern char* user_input;
 // array of codes
-Node* code[100];
+extern Node* code[100];
 // local variable
-LVar* locals;
+extern LVar* locals;
 
 // prototype declaration
 /// @container.c

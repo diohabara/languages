@@ -13,6 +13,85 @@
  * primary    = num | ident | "(" expr ")"
  **/
 
+Token* token;
+Node* code[100];
+LVar* locals;
+
+// make a token connected to cur
+Token* new_token(TokenKind kind, Token* cur, char* str, int len) {
+  Token* tok = calloc(1, sizeof(Token));
+  tok->kind = kind;
+  tok->str = str;
+  tok->len = len;
+  cur->next = tok;
+  return tok;
+}
+
+Node* new_node(NodeKind kind, Node* lhs, Node* rhs) {
+  Node* node = calloc(1, sizeof(Node));
+  node->kind = kind;
+  node->lhs = lhs;
+  node->rhs = rhs;
+  return node;
+}
+
+Node* new_node_num(int val) {
+  Node* node = calloc(1, sizeof(Node));
+  node->kind = ND_NUM;
+  node->val = val;
+  return node;
+}
+
+bool startsWith(char* p, char* q) { return memcmp(p, q, strlen(q)) == 0; }
+
+// read a token if the next token is an expected one
+// if so return true otherwise false
+bool consume(char* op) {
+  if (token->kind != TK_RESERVED || strlen(op) != token->len ||
+      memcmp(token->str, op, token->len))
+    return false;
+
+  token = token->next;
+  return true;
+}
+
+// read a token if the next token is an expected one
+// if so return the next Token
+// otherwise, return NULL
+Token* consume_ident() {
+  if (token->kind != TK_IDENT) return NULL;
+
+  Token* cur = token;
+  token = token->next;
+  return cur;
+}
+
+// read a token if the next token is an expected one
+// otherwise alert error
+void expect(char* op) {
+  if (token->kind != TK_RESERVED || strlen(op) != token->len ||
+      memcmp(token->str, op, token->len))
+    error("%s is not %s", token->str, op);
+  token = token->next;
+}
+
+// read a token and return the number if the next token is number
+// otherwise alert error
+int expect_number(void) {
+  if (token->kind != TK_NUM) error("%s is not number", token->str);
+
+  int val = token->val;
+  token = token->next;
+  return val;
+}
+
+LVar* find_lvar(Token* tok) {
+  for (LVar* var = locals; var; var = var->next)
+    if (var->len == tok->len && !memcmp(tok->str, var->name, var->len))
+      return var;
+  return NULL;
+}
+
 // tokenize input string p and return it
 void tokenize(char* p) {
   Token head;
@@ -47,11 +126,23 @@ void tokenize(char* p) {
     }
 
     if ('a' <= *p && *p <= 'z') {
-      cur = new_token(TK_IDENT, cur, p++, 1);
+      int len = 1;
+      char* start = p;
+      for (;;) {
+        p++;
+        if ('a' <= *p && *p <= 'z')
+          len++;
+        else
+          break;
+      }
+      char* dst = (char*) malloc(sizeof(char) * sizeof(len));
+      strncpy(dst, start, len);
+      dst[len] = '\0';
+      cur = new_token(TK_IDENT, cur, dst, len);
       continue;
     }
 
-    error_at(p, "cannot be tokenized");
+    error("%s cannot be tokenized", p);
   }
 
   cur = new_token(TK_EOF, cur, p, 0);
