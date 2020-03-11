@@ -51,6 +51,9 @@ echo "until step9: local varialbles with a single character"
 echo "---"
 try 3 "a = 3;"
 try 22 "b = 5 * 6 - 8;"
+echo "---"
+echo "until step10: local variables with multiple characters"
+echo "---"
 try 1 "bar = 1;"
 
 echo OK
