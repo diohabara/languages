@@ -11,6 +11,7 @@ typedef enum {
   TK_IDENT,     // identifier
   TK_NUM,       // integer
   TK_EOF,       // end of line
+  TK_RETURN,    // return
 } TokenKind;
 // Token
 typedef struct Token Token;
@@ -34,6 +35,7 @@ typedef enum {
   ND_NE,      // !=
   ND_LT,      // <
   ND_LE,      // <=
+  ND_RETURN   // return
 } NodeKind;
 // a type of nodes of AST
 typedef struct Node Node;
@@ -65,16 +67,19 @@ extern LVar* locals;
 /// @container.c
 void error_at(char* loc, char* fmt, ...);
 void error(char* fmt, ...);
-bool consume(char* op);
-void expect(char* op);
-int expect_number(void);
 bool at_eof(void);
+bool is_alnum(char c);
+/// @parser.c
 bool startsWith(char* p, char* q);
 Token* new_token(TokenKind kind, Token* cur, char* str, int len);
 Node* new_node(NodeKind kind, Node* lhs, Node* rhs);
 Node* new_node_num(int val);
 LVar* find_lvar(Token* tok);
-/// @parser.c
+bool consume(char* op);
+Token* consume_ident(void);
+bool consume_return(void);
+void expect(char* op);
+int expect_number(void);
 void tokenize(char* p);
 void program(void);
 Node* stmt(void);

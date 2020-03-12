@@ -26,3 +26,8 @@ void error(char* fmt, ...) {
 }
 
 bool at_eof(void) { return token->kind == TK_EOF; }
+
+bool is_alnum(char c) {
+  return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') ||
+         ('0' <= c && c <= '9') || (c == '_');
+}

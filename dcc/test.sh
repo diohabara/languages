@@ -55,5 +55,10 @@ echo "---"
 echo "until step10: local variables with multiple characters"
 echo "---"
 try 1 "bar = 1;"
+echo "---"
+echo "until step11: return"
+echo "---"
+try 0 "return 0;"
+try 1 "return 1;"
 
 echo OK

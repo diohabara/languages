@@ -2,7 +2,7 @@
 
 /** Grammar
  * program    = stmt*
- * stmt       = expr ";"
+ * stmt       = expr ";" | "return" expr ";"
  * expr       = assign
  * assign     = equality ("=" assign)?
  * equality   = relational ("==" relational | "!=" relational)*
@@ -16,6 +16,7 @@
 Token* token;
 Node* code[100];
 LVar* locals;
+int i = 0;
 
 // make a token connected to cur
 Token* new_token(TokenKind kind, Token* cur, char* str, int len) {
@@ -58,12 +59,19 @@ bool consume(char* op) {
 // read a token if the next token is an expected one
 // if so return the next Token
 // otherwise, return NULL
-Token* consume_ident() {
+Token* consume_ident(void) {
   if (token->kind != TK_IDENT) return NULL;
 
   Token* cur = token;
   token = token->next;
   return cur;
+}
+
+// read a token if the next token "ND_RETURN"
+bool consume_return(void) {
+  if (token->kind != TK_RETURN) return false;
+  token = token->next;
+  return true;
 }
 
 // read a token if the next token is an expected one
@@ -105,6 +113,12 @@ void tokenize(char* p) {
       continue;
     }
 
+    if (strncmp(p, "return", 6) == 0 && !is_alnum(p[6])) {
+      cur = new_token(TK_RETURN, cur, p, 6);
+      p += 6;
+      continue;
+    }
+
     if (startsWith(p, "==") || startsWith(p, "!=") || startsWith(p, "<=") ||
         startsWith(p, ">=")) {
       cur = new_token(TK_RESERVED, cur, p, 2);
@@ -135,7 +149,7 @@ void tokenize(char* p) {
         else
           break;
       }
-      char* dst = (char*) malloc(sizeof(char) * sizeof(len));
+      char* dst = (char*)malloc(sizeof(char) * sizeof(len));
       strncpy(dst, start, len);
       dst[len] = '\0';
       cur = new_token(TK_IDENT, cur, dst, len);
@@ -156,9 +170,16 @@ void program(void) {
   code[i] = NULL;
 }
 
-// stmt = expr ";"
+// stmt = expr ";" | "return" expr ";"
 Node* stmt(void) {
-  Node* node = expr();
+  Node* node;
+  if (consume_return()) {
+    node = calloc(1, sizeof(Node));
+    node->kind = ND_RETURN;
+    node->lhs = expr();
+  } else {
+    node = expr();
+  }
   expect(";");
   return node;
 }
