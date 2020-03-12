@@ -3,7 +3,7 @@ try() {
   expected="$1"
   input="$2"
 
-  ./dcc "$input" > tmp.s
+  ./dcc "$input" >tmp.s
   gcc -o tmp tmp.s
   ./tmp
   actual="$?"
@@ -51,14 +51,30 @@ echo "until step9: local varialbles with a single character"
 echo "---"
 try 3 "a = 3;"
 try 22 "b = 5 * 6 - 8;"
+
 echo "---"
 echo "until step10: local variables with multiple characters"
 echo "---"
 try 1 "bar = 1;"
+
 echo "---"
 echo "until step11: return"
 echo "---"
 try 0 "return 0;"
 try 1 "return 1;"
 
+echo "---"
+echo "until step12: if, while, for"
+echo "---"
+echo "if"
+try 1 "if (1) 1;"
+try 1 "if (1) 1 else 0;"
+try 0 "if (0) 1 else 0;"
+echo "while"
+# try 0 "while (0) 1; 0;"
+# try 0 "while (0)"
+echo "for"
+# try 5 "for (a = 0; a < 5; a = a + 1);"
+# try 120 "a = 1; for (i = 1; i <= 5; i = i * a) ;"
+# try 55 "a = 0; for (i = 1; i <= 10; i = i + 1) a = a + i;"
 echo OK
