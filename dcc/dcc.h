@@ -12,6 +12,10 @@ typedef enum {
   TK_NUM,       // integer
   TK_EOF,       // end of line
   TK_RETURN,    // return
+  TK_IF,        // if
+  TK_ELSE,      // else
+  TK_WHILE,     // while
+  TK_FOR        // for
 } TokenKind;
 // Token
 typedef struct Token Token;
@@ -35,7 +39,10 @@ typedef enum {
   ND_NE,      // !=
   ND_LT,      // <
   ND_LE,      // <=
-  ND_RETURN   // return
+  ND_RETURN,  // return
+  ND_IF,      // if
+  ND_WHILE,   // while
+  ND_FOR      // for
 } NodeKind;
 // a type of nodes of AST
 typedef struct Node Node;
