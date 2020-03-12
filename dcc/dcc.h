@@ -50,6 +50,10 @@ struct Node {
   NodeKind kind;  // type of Node
   Node* lhs;      // left hand side
   Node* rhs;      // right hand side
+  Node* cond;     // condition
+  Node* then;     // then
+  Node* init;     // initilization
+  Node* step;     // step
   int val;        // for ND_NUM
   int offset;     // ND_LVAR
 };
