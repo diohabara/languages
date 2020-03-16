@@ -35,45 +35,45 @@ void gen(Node* node) {
       printf("  pop rbp\n");
       printf("  ret\n");
       return;
-    case ND_IF:        // if (cond) then
-      // cond
+    case ND_IF:  // if (cond) then
+      gen(node->cond);
       printf("  pop rax\n");
       printf("  cmp rax, 0\n");
       printf("  je  .LendXXX\n");
-      // then
+      gen(node->then);
       printf(".LendXXX:");
       return;
     case ND_IFELSE:  // if (cond) then else els
       printf(".LbeginXXX:");
-      // cond
+      gen(node->cond);
       printf("  pop rax\n");
       printf("  cmp rax, 0\n");
       printf("  je  .LendXXX");
-      // then
+      gen(node->then);
       printf("  jmp .LendXXX");
       printf(".LelseXXX");
-      // els
+      gen(node->els);
       printf(".LendXXX");
       return;
-    case ND_WHILE: // while (cond) then
+    case ND_WHILE:  // while (cond) then
       printf(".LbeginXXX:");
-      // cond
+      gen(node->cond);
       printf("  pop rax\n");
       printf("  cmp rax, 0\n");
       printf("  je  .LendXXX\n");
-      // then
+      gen(node->then);
       printf("  jmp .LbeginXXX\n");
       printf(".LendXXX:");
       return;
     case ND_FOR:  // for (init; cond; step) then;
-      // init
+      gen(node->init);
       printf(".LbeginXXX:\n");
-      // cond
+      gen(node->cond);
       printf("  pop rax\n");
       printf("  cmp rax, 0\n");
       printf("  je  .LendXXX\n");
-      // step
-      // then
+      gen(node->step);
+      gen(node->then);
       printf("  je  .LbeginXXX\n");
       printf(".LendXXX:\n");
       return;
