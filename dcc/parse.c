@@ -2,7 +2,12 @@
 
 /** Grammar
  * program    = stmt*
- * stmt       = expr ";" | "return" expr ";"
+ * stmt       = expr ";"
+ * stmt       = expr ";"
+              | "if" "(" expr ")" stmt ("else" stmt)?
+              | "while" "(" expr ")" stmt
+              | "for" "(" expr? ";" expr? ";" expr? ")" stmt
+              | "return" expr ";"
  * expr       = assign
  * assign     = equality ("=" assign)?
  * equality   = relational ("==" relational | "!=" relational)*
@@ -67,9 +72,36 @@ Token* consume_ident(void) {
   return cur;
 }
 
-// read a token if the next token "ND_RETURN"
+// read a token if the next token is "ND_RETURN"
 bool consume_return(void) {
   if (token->kind != TK_RETURN) return false;
+  token = token->next;
+  return true;
+}
+
+// read a token if the next token is "ND_IF"
+bool consume_if(void) {
+  if (token->kind != TK_IF) return false;
+  token = token->next;
+  return false;
+}
+
+bool consume_else(void) {
+  if (token->kind != TK_ELSE) return false;
+  token = token->next;
+  return true;
+}
+
+// read a token if the next token is "ND_WHILE"
+bool consume_while(void) {
+  if (token->kind != TK_WHILE) return false;
+  token = token->next;
+  return true;
+}
+
+// read a token if the next token is "ND_FOR"
+bool consume_for(void) {
+  if (token->kind != TK_FOR) return false;
   token = token->next;
   return true;
 }
