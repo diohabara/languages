@@ -71,8 +71,8 @@ void gen(Node* node) {
       printf("  pop rax\n");
       printf("  cmp rax, 0\n");
       printf("  je  .LendXXX\n");
+      gen(node->lhs);
       gen(node->step);
-      gen(node->then);
       printf("  je  .LbeginXXX\n");
       printf(".LendXXX:\n");
       return;
