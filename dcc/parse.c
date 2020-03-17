@@ -82,7 +82,7 @@ bool consume_return(void) {
 bool consume_if(void) {
   if (token->kind != TK_IF) return false;
   token = token->next;
-  return false;
+  return true;
 }
 
 bool consume_else(void) {
