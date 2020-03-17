@@ -55,7 +55,7 @@ void gen(Node* node) {
       printf(".LendXXX:\n");
       return;
     case ND_WHILE:  // while (cond) then
-      printf(".LbeginXXX:");
+      printf(".LbeginXXX:\n");
       gen(node->cond);
       printf("  pop rax\n");
       printf("  cmp rax, 0\n");
@@ -64,7 +64,7 @@ void gen(Node* node) {
       printf("  jmp .LbeginXXX\n");
       printf(".LendXXX:\n");
       return;
-    case ND_FOR:  // for (init; cond; step) then;
+    case ND_FOR:  // for (init; cond; step) lhs;
       gen(node->init);
       printf(".LbeginXXX:\n");
       gen(node->cond);
@@ -73,7 +73,7 @@ void gen(Node* node) {
       printf("  je  .LendXXX\n");
       gen(node->lhs);
       gen(node->step);
-      printf("  je  .LbeginXXX\n");
+      printf("  jmp  .LbeginXXX\n");
       printf(".LendXXX:\n");
       return;
   }
