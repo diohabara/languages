@@ -143,49 +143,50 @@ void tokenize(char* p) {
       p++;
       continue;
     }
-
+    // return
     if (strncmp(p, "return", 6) == 0 && !is_alnum(p[6])) {
       cur = new_token(TK_RETURN, cur, p, 6);
       p += 6;
       continue;
     }
-
-    if (startsWith(p, "if")) {
+    // if
+    if (strncmp(p, "if", 2) == 0 && !is_alnum(p[2])) {
       cur = new_token(TK_IF, cur, p, 2);
       p += 2;
       continue;
     }
-
-    if (startsWith(p, "else")) {
+    // else
+    if (strncmp(p, "else", 4) == 0 && !is_alnum(p[4])) {
       cur = new_token(TK_ELSE, cur, p, 4);
       p += 4;
       continue;
     }
-
-    if (startsWith(p, "while")) {
+    // while
+    if (strncmp(p, "while", 5) == 0 && !is_alnum(p[5])) {
       cur = new_token(TK_WHILE, cur, p, 5);
       p += 5;
       continue;
     }
-
-    if (startsWith(p, "for")) {
+    // for
+    if (strncmp(p, "for", 3) == 0 && !is_alnum(p[3])) {
       cur = new_token(TK_FOR, cur, p, 3);
       p += 3;
       continue;
     }
-
+    // relational
     if (startsWith(p, "==") || startsWith(p, "!=") || startsWith(p, "<=") ||
         startsWith(p, ">=")) {
       cur = new_token(TK_RESERVED, cur, p, 2);
       p += 2;
       continue;
     }
-
+    // others
     if (strchr("+-*/()<>;=", *p)) {
-      cur = new_token(TK_RESERVED, cur, p++, 1);
+      cur = new_token(TK_RESERVED, cur, p, 1);
+      ++p;
       continue;
     }
-
+    // num
     if (isdigit(*p)) {
       cur = new_token(TK_NUM, cur, p, 0);
       char* q = p;
