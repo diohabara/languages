@@ -50,7 +50,7 @@ Node* new_node_num(int val) {
 
 bool startsWith(char* p, char* q) { return memcmp(p, q, strlen(q)) == 0; }
 
-// read a token if the next token is an expected one
+// read the next token if it is an expected one
 // if so return true otherwise false
 bool consume(char* op) {
   if (token->kind != TK_RESERVED || strlen(op) != token->len ||
@@ -61,8 +61,8 @@ bool consume(char* op) {
   return true;
 }
 
-// read a token if the next token is an expected one
-// if so return the next Token
+// read the next token if the it is "TK_IDENT"
+// if so, return it
 // otherwise, return NULL
 Token* consume_ident(void) {
   if (token->kind != TK_IDENT) return NULL;
@@ -71,20 +71,21 @@ Token* consume_ident(void) {
   return cur;
 }
 
-// read a token if the next token is "ND_RETURN"
+// read the next token if it is "ND_RETURN"
 bool consume_return(void) {
   if (token->kind != TK_RETURN) return false;
   token = token->next;
   return true;
 }
 
-// read a token if the next token is "ND_IF"
+// read the next token if it is "TK_IF"
 bool consume_if(void) {
   if (token->kind != TK_IF) return false;
   token = token->next;
   return true;
 }
 
+// read the next token if it is "TK_ELSE"
 bool consume_else(void) {
   if (token->kind != TK_ELSE) return false;
   token = token->next;
@@ -181,7 +182,7 @@ void tokenize(char* p) {
       continue;
     }
     // others
-    if (strchr("+-*/()<>;=", *p)) {
+    if (strchr("+-*/()<>;={}", *p)) {
       cur = new_token(TK_RESERVED, cur, p, 1);
       ++p;
       continue;
@@ -225,6 +226,7 @@ void program(void) {
 }
 
 /* stmt = expr ";"
+        | "{" stmt* "}"
         | "if" "(" expr ")" stmt ("else" stmt)?
         | "while" "(" expr ")" stmt
         | "for" "(" expr? ";" expr? ";" expr? ")" stmt
@@ -272,6 +274,7 @@ Node* stmt(void) {
     node = calloc(1, sizeof(Node));
     node->kind = ND_RETURN;
     node->lhs = expr();
+  } else if (consume("{")) {
   } else {
     node = expr();
   }
