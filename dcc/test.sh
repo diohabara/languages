@@ -83,7 +83,7 @@ echo "---"
 echo "until step13: block statement"
 echo "---"
 try 1 "a = 1; {a = 3;} a;"
-try 2 "{1 + 1;}"
+try 2 "{ 1 + 1; }"
 try 55 "a = 0; for (i = 1; i <= 10; i = i + 1) { a = a + i; } a;"
 
 echo OK
