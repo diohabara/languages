@@ -110,14 +110,14 @@ bool consume_for(void) {
 void expect(char* op) {
   if (token->kind != TK_RESERVED || strlen(op) != token->len ||
       memcmp(token->str, op, token->len))
-    error("%s is expected, but got %s", op, token->str);
+    error("***\n%s is expected, but got %s\n***", op, token->str);
   token = token->next;
 }
 
 // read a token and return the number if the next token is number
 // otherwise alert error
 int expect_number(void) {
-  if (token->kind != TK_NUM) error("%s is not number", token->str);
+  if (token->kind != TK_NUM) error("***\n%s is not number\n***", token->str);
 
   int val = token->val;
   token = token->next;
