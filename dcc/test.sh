@@ -78,4 +78,12 @@ echo "for statement"
 try 5 "b = 0; for (a = 0; a < 5; a = a + 1) b = b + 1; b;"
 try 55 "a = 0; for (i = 1; i <= 10; i = i + 1) a = a + i; a;"
 try 120 "a = 1; for (i = 1; i <= 5; i = i + 1) a = a * i; a;"
+
+echo "---"
+echo "until step13: block statement"
+echo "---"
+try 1 "a = 1; {a = 3;} a;"
+try 2 "{1 + 1;}"
+try 55 "a = 0; for (i = 1; i <= 10; i = i + 1) { a = a + i; } a;"
+
 echo OK
