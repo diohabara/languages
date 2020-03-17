@@ -211,10 +211,8 @@ void tokenize(char* p) {
       cur = new_token(TK_IDENT, cur, dst, len);
       continue;
     }
-
     error("%s cannot be tokenized", p);
   }
-
   cur = new_token(TK_EOF, cur, p, 0);
   token = head.next;
 }
@@ -267,7 +265,7 @@ Node* stmt(void) {
       expect(";");
       node->step = expr();
       expect(")");
-      node->then = stmt();
+      node->lhs = stmt();
       return node;
     }
   } else if (consume_return()) {
