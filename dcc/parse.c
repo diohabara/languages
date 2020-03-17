@@ -66,7 +66,6 @@ bool consume(char* op) {
 // otherwise, return NULL
 Token* consume_ident(void) {
   if (token->kind != TK_IDENT) return NULL;
-
   Token* cur = token;
   token = token->next;
   return cur;
