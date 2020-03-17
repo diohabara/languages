@@ -110,7 +110,7 @@ bool consume_for(void) {
 void expect(char* op) {
   if (token->kind != TK_RESERVED || strlen(op) != token->len ||
       memcmp(token->str, op, token->len))
-    error("%s is not %s", token->str, op);
+    error("%s is expected, but got %s", op, token->str);
   token = token->next;
 }
 
