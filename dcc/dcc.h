@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// types of tokens
+// types of a token
 typedef enum {
   TK_RESERVED,  // sign
   TK_IDENT,     // identifier
@@ -26,7 +26,7 @@ struct Token {
   char* str;       // token string
   int len;         // the length of token
 };
-// a kind of nodes of AST
+// kinds of a node of an AST
 typedef enum {
   ND_ADD,     // +
   ND_SUB,     // -
@@ -46,21 +46,29 @@ typedef enum {
   ND_FOR,     // for
   ND_BLOCK    //{}
 } NodeKind;
-// a type of nodes of AST
+// node of AST
+// vector
+typedef struct Vector Vector;
+struct Vector {
+  void** data;
+  int capacity;
+  int len;
+};
 typedef struct Node Node;
 struct Node {
-  NodeKind kind;  // type of Node
-  Node* lhs;      // left hand side
-  Node* rhs;      // right hand side
-  Node* cond;     // condition
-  Node* then;     // then
-  Node* els;      // else
-  Node* init;     // initilization
-  Node* step;     // step
-  int val;        // for ND_NUM
-  int offset;     // ND_LVAR
+  Vector* statements;  // for ND_BLOCK
+  NodeKind kind;       // type of Node
+  Node* lhs;           // left hand side
+  Node* rhs;           // right hand side
+  Node* cond;          // condition
+  Node* then;          // then
+  Node* els;           // else
+  Node* init;          // initilization
+  Node* step;          // step
+  int val;             // for ND_NUM
+  int offset;          // ND_LVAR
 };
-// a type of local variables
+// local variables
 typedef struct LVar LVar;
 struct LVar {
   LVar* next;  // the next variable or NULL
