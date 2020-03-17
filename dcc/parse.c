@@ -194,7 +194,7 @@ void tokenize(char* p) {
       cur->len = p - q;
       continue;
     }
-
+    // variables
     if ('a' <= *p && *p <= 'z') {
       int len = 1;
       char* start = p;
@@ -226,10 +226,51 @@ void program(void) {
   code[i] = NULL;
 }
 
-// stmt = expr ";" | "return" expr ";"
+/* stmt = expr ";"
+        | "if" "(" expr ")" stmt ("else" stmt)?
+        | "while" "(" expr ")" stmt
+        | "for" "(" expr? ";" expr? ";" expr? ")" stmt
+        | "return" expr ";"
+*/
 Node* stmt(void) {
   Node* node;
-  if (consume_return()) {
+  if (consume_if()) {
+    node = calloc(1, sizeof(Node));
+    if (consume("(")) {
+      node->cond = expr();
+      expect(")");
+      node->then = stmt();
+      if (consume_else()) {
+        node->kind = ND_IFELSE;
+        node->els = stmt();
+      } else {
+        node->kind = ND_IF;
+      }
+      return node;
+    }
+  } else if (consume_while()) {
+    node = calloc(1, sizeof(Node));
+    node->kind = ND_WHILE;
+    if (consume("(")) {
+      node->cond = expr();
+      expect(")");
+      node->then = stmt();
+      return node;
+    }
+  } else if (consume_for()) {
+    node = calloc(1, sizeof(Node));
+    node->kind = ND_FOR;
+    if (consume("(")) {
+      node->init = expr();
+      expect(";");
+      node->cond = expr();
+      expect(";");
+      node->step = expr();
+      expect(")");
+      node->then = stmt();
+      return node;
+    }
+  } else if (consume_return()) {
     node = calloc(1, sizeof(Node));
     node->kind = ND_RETURN;
     node->lhs = expr();
