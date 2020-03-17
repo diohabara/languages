@@ -18,14 +18,13 @@ typedef enum {
   TK_FOR        // for
 } TokenKind;
 // Token
-typedef struct Token Token;
-struct Token {
+typedef struct {
   TokenKind kind;  // type of token
   Token* next;     // next token
   int val;         // if TK_NUM -> the value
   char* str;       // token string
   int len;         // the length of token
-};
+} Token;
 // kinds of a node of an AST
 typedef enum {
   ND_ADD,     // +
@@ -46,16 +45,14 @@ typedef enum {
   ND_FOR,     // for
   ND_BLOCK    //{}
 } NodeKind;
-// node of AST
 // vector
-typedef struct Vector Vector;
-struct Vector {
+typedef struct {
   void** data;
   int capacity;
   int len;
-};
-typedef struct Node Node;
-struct Node {
+} Vector;
+// node of AST
+typedef struct {
   Vector* statements;  // for ND_BLOCK
   NodeKind kind;       // type of Node
   Node* lhs;           // left hand side
@@ -67,15 +64,14 @@ struct Node {
   Node* step;          // step
   int val;             // for ND_NUM
   int offset;          // ND_LVAR
-};
+} Node;
 // local variables
-typedef struct LVar LVar;
-struct LVar {
+typedef struct {
   LVar* next;  // the next variable or NULL
   char* name;  // the name of a variable
   int len;     // the length of the name
   int offset;  // offset from RBP
-};
+} LVar;
 // current token
 extern Token* token;
 // input program
