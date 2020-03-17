@@ -210,3 +210,71 @@ make: *** [test] Error 1
   - 結果的に`error_at`は使わないことになった．
   - 複数文字のローカル変数が出来たのは結構嬉しい．次だ次
 - step11: return文
+
+## Day7
+
+- step11: return文
+  - 実装完了
+- step12: 制御構文を足す
+  - `if`, `while`, `for`を新たに実装するっぽい
+
+## Day8
+
+- step12: 制御構文を足す
+  - 続きをする
+  - `if else`文の実装が結構難しい
+    - [このサイト](https://godbolt.org/)でアセンブリを吐かせて見れば良いのでは？
+    - 上手く行かないんだけど^^;
+  - `tokenize`関数で条件分岐して，そこで`IF`か`IFELSE`かを分ければいいのではないかという考えに至った
+  - なんか上手く行かない
+  - 書いているコード自体は間違っていない気がする．参照しているアセンブリが間違っている？
+    - アセンブリを見てみる
+
+## Day9
+
+- step12: 制御構文を足す
+- 結局昨日も制御構文が追加できなかったので，これを行う
+  - `if`文の実装には成功した
+  - `ifelse`文の実装が失敗している
+  - `else`の部分が上手くパース出来ていない？
+
+```console
+tmp.s: Assembler messages:
+tmp.s:13: Error: unknown pseudo-op: `.lelsexxx'
+tmp.s:15: Error: unknown pseudo-op: `.lendxxx'
+if (1) 1; else 0; => 1
+tmp.s: Assembler messages:
+tmp.s:13: Error: unknown pseudo-op: `.lelsexxx'
+tmp.s:15: Error: unknown pseudo-op: `.lendxxx'
+if (0) 1; else 0; => 0 expected, but got 1
+Makefile:11: recipe for target 'test' failed
+make: *** [test] Error 1
+```
+
+- というエラー文が出てくる
+- 見た感じ，サイトの方のアセンブリが間違えている？？？
+- ということでアセンブリを見直す
+- ジャンプ元は`.LelseXXX`で良いが，ジャンプ後のラベルは`.LelseXXX:`と書く必要がある．
+- 直った:smile:
+- `while`文までは上手く行った:laugh:
+- 次は`for`なんだけど上手く行かない…なぜ
+
+```console
+for statement
+./test.sh: line 2: 23921 Segmentation fault      (core dumped) ./dcc "$input" > tmp.s
+/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o: In function `_start':
+(.text+0x20): undefined reference to `main'
+collect2: error: ld returned 1 exit status
+./test.sh: line 8: ./tmp: No such file or directory
+a = 0; for (a = 0; a < 5; a = a + 1) 1; return a; => 5 expected, but got 127
+Makefile:11: recipe for target 'test' failed
+make: *** [test] Error 1
+```
+
+- 上のようなエラー文が出てくる．`for (init; cond; step) then`の`then`が式になっている？
+- `try 5 "b = 0; for (a = 0; a < 5; a = a + 1) b = b + 1; b;"`
+- このようなテストの結果が`1`になるので，ループされていないっぽい．
+- `je`と`jmp`を間違えていた…
+- `for`文の実装終わった:smile*
+- step13: ブロック
+  - 次は`{}`の実装をするっぽい
