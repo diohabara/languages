@@ -44,16 +44,15 @@ void gen(Node* node) {
       printf(".LendXXX:\n");
       return;
     case ND_IFELSE:  // if (cond) then else els
-      printf(".LbeginXXX:");
       gen(node->cond);
       printf("  pop rax\n");
       printf("  cmp rax, 0\n");
       printf("  je  .LelseXXX\n");
       gen(node->then);
       printf("  jmp .LendXXX\n");
-      printf(".LelseXXX\n");
+      printf(".LelseXXX:\n");
       gen(node->els);
-      printf(".LendXXX\n");
+      printf(".LendXXX:\n");
       return;
     case ND_WHILE:  // while (cond) then
       printf(".LbeginXXX:");
