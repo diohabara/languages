@@ -53,6 +53,7 @@ struct Node {
   Node* rhs;      // right hand side
   Node* cond;     // condition
   Node* then;     // then
+  Node* els;      // else
   Node* init;     // initilization
   Node* step;     // step
   int val;        // for ND_NUM
