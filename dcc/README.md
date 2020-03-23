@@ -7,12 +7,12 @@ This compiler is implemeted following [this site's instruction](https://www.sigb
 ## EBNF
 
 ```ebnf
-program    = stmt* ;
+program    = {stmt} ;
 stmt       = expr, ";"
-           | "{", stmt*, "}"
+           | "{", {stmt}, "}"
            | "if", "(", expr, ")", stmt, [("else", stmt)]
            | "while", "(", expr, ")", stmt
-           | "for", "(", [expr], ";", expr?, ";", [expr], ")", stmt
+           | "for", "(", [expr], ";", [expr], ";", [expr], ")", stmt
            | "return", expr, ";" ;
 expr       = assign ;
 assign     = equality, [("=", assign)] ;
