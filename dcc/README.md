@@ -280,7 +280,7 @@ make: *** [test] Error 1
   - 次は`{}`の実装をするっぽい
   - 構文的には関数の`{}`も`if`や`while`で使われるものと同じらしい
   - `ND_BLOCK`を追加する
-  - ブロックに含まれる式を持つベクタを追加する必要がある
+  - ブロックに含まれる式を持つvectorを追加する必要がある
   - ノードが`ND_BLOCK`のとき，そのノードに含まれるステートメントのコードを順番に生成するようにする
   - 1つ1つのステートメントが1つの値をスタックに残すので，それをポップしないようにする
 
@@ -288,4 +288,27 @@ make: *** [test] Error 1
 
 - step13: ブロック
   - 引き続きこれをやっていく．
-  - まずはベクタの実装
+  - まずはvectorの実装．
+  - vectorの実装を行ったは出来たはず．
+  - `data:ポインタの入る配列`, `capacity:vectorの大きさで足りなくなると倍増する`, `len:現在入っている要素の数でこれから入れる要素の位置`を持っているデータ構造
+  - `{`から`}`までの式を全てここに格納する．
+  - パーサーの方は実装出来たはず．アセンブリを生成すれば良さそう．
+  - と思ったが下記のようなエラーが出るので，パーサーが失敗していそう．
+  - ---console
+    step13: block statement
+    ---
+    ***
+    } is expected, but got a
+    ***
+    /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o: In function `_start':
+    (.text+0x20): undefined reference to `main'
+    collect2: error: ld returned 1 exit status
+    ./test.sh: line 8: ./tmp: No such file or directory
+    a = 1; {a = 3;} a; => 1 expected, but got 127
+    Makefile:11: recipe for target 'test' failed
+    make: *** [test] Error 1
+    ```
+  - 直した…はず
+  - 何かが直っていない．
+  - 複文だけのプログラムで失敗するみたい．これをどうにかして直したい．
+  - 直った！．原因は`calloc`でメモリを確保していなかったからでこれで想定していなかった領域を触っていたことっぽい．
