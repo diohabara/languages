@@ -234,7 +234,15 @@ void program(void) {
 */
 Node* stmt(void) {
   Node* node;
-  if (consume_if()) {
+  if (consume("{")) {
+    node = calloc(1, sizeof(Node));
+    node->kind = ND_BLOCK;
+    node->stmts = new_vector();
+    while (!consume("}")) {
+      vec_push(node->stmts, stmt());
+    }
+    return node;
+  } else if (consume_if()) {
     node = calloc(1, sizeof(Node));
     if (consume("(")) {
       node->cond = expr();
