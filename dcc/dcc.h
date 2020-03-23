@@ -9,6 +9,7 @@ typedef struct Token Token;
 typedef struct Vector Vector;
 typedef struct Node Node;
 typedef struct LVar LVar;
+typedef struct Function Function;
 // types of a token
 typedef enum {
   TK_RESERVED,  // sign
@@ -24,23 +25,24 @@ typedef enum {
 // Token
 // kinds of a node of an AST
 typedef enum {
-  ND_ADD,     // +
-  ND_SUB,     // -
-  ND_MUL,     // *
-  ND_DIV,     // /
-  ND_ASSIGN,  // =
-  ND_LVAR,    // local variable
-  ND_NUM,     // integer
-  ND_EQ,      // ==
-  ND_NE,      // !=
-  ND_LT,      // <
-  ND_LE,      // <=
-  ND_RETURN,  // return
-  ND_IF,      // if
-  ND_IFELSE,  // if else
-  ND_WHILE,   // while
-  ND_FOR,     // for
-  ND_BLOCK    //{}
+  ND_ADD,       // +
+  ND_SUB,       // -
+  ND_MUL,       // *
+  ND_DIV,       // /
+  ND_ASSIGN,    // =
+  ND_LVAR,      // local variable
+  ND_NUM,       // integer
+  ND_EQ,        // ==
+  ND_NE,        // !=
+  ND_LT,        // <
+  ND_LE,        // <=
+  ND_RETURN,    // return
+  ND_IF,        // if
+  ND_IFELSE,    // if else
+  ND_WHILE,     // while
+  ND_FOR,       // for
+  ND_BLOCK,     // {}
+  ND_FUNC_CALL  // function call
 } NodeKind;
 struct Token {
   TokenKind kind;  // type of token
@@ -58,16 +60,16 @@ struct Vector {
 // node of AST
 struct Node {
   Vector* stmts;  // for ND_BLOCK
-  NodeKind kind;       // type of Node
-  Node* lhs;           // left hand side
-  Node* rhs;           // right hand side
-  Node* cond;          // condition
-  Node* then;          // then
-  Node* els;           // else
-  Node* init;          // initilization
-  Node* step;          // step
-  int val;             // for ND_NUM
-  int offset;          // ND_LVAR
+  NodeKind kind;  // type of Node
+  Node* lhs;      // left hand side
+  Node* rhs;      // right hand side
+  Node* cond;     // condition
+  Node* then;     // then
+  Node* els;      // else
+  Node* init;     // initilization
+  Node* step;     // step
+  int val;        // for ND_NUM
+  int offset;     // ND_LVAR
 };
 // local variables
 struct LVar {
@@ -76,6 +78,11 @@ struct LVar {
   int len;     // the length of the name
   int offset;  // offset from RBP
 };
+// functioin
+struct Fucntion {
+  // TODO: fill this
+};
+
 // current token
 extern Token* token;
 // input program
