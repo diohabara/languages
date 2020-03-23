@@ -8,22 +8,22 @@ This compiler is implemeted following [this site's instruction](https://www.sigb
 
 ```ebnf
 program    = {stmt} ;
-stmt       = expr, ";"
-           | "{", {stmt}, "}"
-           | "if", "(", expr, ")", stmt, [("else", stmt)]
-           | "while", "(", expr, ")", stmt
-           | "for", "(", [expr], ";", [expr], ";", [expr], ")", stmt
-           | "return", expr, ";" ;
+stmt       = expr , ";"
+           | "{" , {stmt} , "}"
+           | "if" , "(" , expr, ")" , stmt , [("else" , stmt)]
+           | "while" , "(" , expr , ")" , stmt
+           | "for" , "(" , [expr] , ";" , [expr] , ";" , [expr] , ")" , stmt
+           | "return" , expr , ";" ;
 expr       = assign ;
-assign     = equality, [("=", assign)] ;
-equality   = relational, {("==", relational | "!=", relational)} ;
-relational = add, {("<", add | "<=", add | ">", add | ">=", add)} ;
-add        = mul, {("+", mul | "-", mul)} ;
-mul        = unary, {("*", unary | "/", unary)} ;
-unary      = [("+" | "-")], primary ;
+assign     = equality , [("=" , assign)] ;
+equality   = relational , {("==" , relational | "!=" , relational)} ;
+relational = add , {("<" , add | "<=" , add | ">" , add | ">=" , add)} ;
+add        = mul , {("+" , mul | "-" , mul)} ;
+mul        = unary , {("*" , unary | "/" , unary)} ;
+unary      = [("+" | "-")] , primary ;
 primary    = num
-           | ident, [("(", ")")]
-           | "(", expr, ")" ;
+           | ident , [("(" , ")")]
+           | "(" , expr , ")" ;
 ```
 
 ## Work log
