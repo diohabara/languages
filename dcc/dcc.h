@@ -4,7 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+// types
+typedef struct Token Token;
+typedef struct Vector Vector;
+typedef struct Node Node;
+typedef struct LVar LVar;
 // types of a token
 typedef enum {
   TK_RESERVED,  // sign
@@ -18,13 +22,6 @@ typedef enum {
   TK_FOR        // for
 } TokenKind;
 // Token
-typedef struct {
-  TokenKind kind;  // type of token
-  Token* next;     // next token
-  int val;         // if TK_NUM -> the value
-  char* str;       // token string
-  int len;         // the length of token
-} Token;
 // kinds of a node of an AST
 typedef enum {
   ND_ADD,     // +
@@ -45,15 +42,22 @@ typedef enum {
   ND_FOR,     // for
   ND_BLOCK    //{}
 } NodeKind;
+struct Token {
+  TokenKind kind;  // type of token
+  Token* next;     // next token
+  int val;         // if TK_NUM -> the value
+  char* str;       // token string
+  int len;         // the length of token
+};
 // vector
-typedef struct {
+struct Vector {
   void** data;
   int capacity;
   int len;
-} Vector;
+};
 // node of AST
-typedef struct {
-  Vector* statements;  // for ND_BLOCK
+struct Node {
+  Vector* stmts;  // for ND_BLOCK
   NodeKind kind;       // type of Node
   Node* lhs;           // left hand side
   Node* rhs;           // right hand side
@@ -64,14 +68,14 @@ typedef struct {
   Node* step;          // step
   int val;             // for ND_NUM
   int offset;          // ND_LVAR
-} Node;
+};
 // local variables
-typedef struct {
+struct LVar {
   LVar* next;  // the next variable or NULL
   char* name;  // the name of a variable
   int len;     // the length of the name
   int offset;  // offset from RBP
-} LVar;
+};
 // current token
 extern Token* token;
 // input program
@@ -87,6 +91,9 @@ void error_at(char* loc, char* fmt, ...);
 void error(char* fmt, ...);
 bool at_eof(void);
 bool is_alnum(char c);
+Vector* new_vector(void);
+void vec_push(Vector* vec, void* ele);
+void* vec_at(Vector* vec, int index);
 /// @parser.c
 bool startsWith(char* p, char* q);
 Token* new_token(TokenKind kind, Token* cur, char* str, int len);
