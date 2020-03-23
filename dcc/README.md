@@ -294,20 +294,21 @@ make: *** [test] Error 1
   - `{`から`}`までの式を全てここに格納する．
   - パーサーの方は実装出来たはず．アセンブリを生成すれば良さそう．
   - と思ったが下記のようなエラーが出るので，パーサーが失敗していそう．
-  - ---console
-    step13: block statement
-    ---
-    ***
-    } is expected, but got a
-    ***
-    /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o: In function `_start':
-    (.text+0x20): undefined reference to `main'
-    collect2: error: ld returned 1 exit status
-    ./test.sh: line 8: ./tmp: No such file or directory
-    a = 1; {a = 3;} a; => 1 expected, but got 127
-    Makefile:11: recipe for target 'test' failed
-    make: *** [test] Error 1
-    ```
+  - 
+  ---console
+  step13: block statement
+  ---
+  ***
+  } is expected, but got a
+  ***
+  /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o: In function `_start':
+  (.text+0x20): undefined reference to `main'
+  collect2: error: ld returned 1 exit status
+  ./test.sh: line 8: ./tmp: No such file or directory
+  a = 1; {a = 3;} a; => 1 expected, but got 127
+  Makefile:11: recipe for target 'test' failed
+  make: *** [test] Error 1
+  ```
   - 直した…はず
   - 何かが直っていない．
   - 複文だけのプログラムで失敗するみたい．これをどうにかして直したい．
