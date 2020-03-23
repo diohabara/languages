@@ -4,6 +4,28 @@ This is a compiler of C language
 
 This compiler is implemeted following [this site's instruction](https://www.sigbus.info/compilerbook)
 
+## EBNF
+
+```ebnf
+program    = stmt*
+stmt       = expr ";"
+           | "{" stmt* "}"
+           | "if" "(" expr ")" stmt ("else" stmt)?
+           | "while" "(" expr ")" stmt
+           | "for" "(" expr? ";" expr? ";" expr? ")" stmt
+           | "return" expr ";"
+expr       = assign
+assign     = equality ("=" assign)?
+equality   = relational ("==" relational | "!=" relational)*
+relational = add ("<" add | "<=" add | ">" add | ">=" add)*
+add        = mul ("+" mul | "-" mul)*
+mul        = unary ("*" unary | "/" unary)*
+unary      = ("+" | "-")? primary
+primary    = num
+           | ident ("(" ")")?
+           | "(" expr ")"
+```
+
 ## Work log
 
 ### Day1
@@ -294,7 +316,8 @@ make: *** [test] Error 1
   - `{`から`}`までの式を全てここに格納する．
   - パーサーの方は実装出来たはず．アセンブリを生成すれば良さそう．
   - と思ったが下記のようなエラーが出るので，パーサーが失敗していそう．
-  - 
+  -
+
   ```console
   step13: block statement
   ---
@@ -309,6 +332,7 @@ make: *** [test] Error 1
   Makefile:11: recipe for target 'test' failed
   make: *** [test] Error 1
   ```
+
   - 直した…はず
   - 何かが直っていない．
   - 複文だけのプログラムで失敗するみたい．これをどうにかして直したい．
