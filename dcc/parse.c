@@ -1,25 +1,5 @@
 #include "dcc.h"
 
-/** Grammar
- * program    = stmt*
- * stmt       = expr ";"
- *            | "{" stmt* "}"
- *            | "if" "(" expr ")" stmt ("else" stmt)?
- *            | "while" "(" expr ")" stmt
- *            | "for" "(" expr? ";" expr? ";" expr? ")" stmt
- *            | "return" expr ";"
- * expr       = assign
- * assign     = equality ("=" assign)?
- * equality   = relational ("==" relational | "!=" relational)*
- * relational = add ("<" add | "<=" add | ">" add | ">=" add)*
- * add        = mul ("+" mul | "-" mul)*
- * mul        = unary ("*" unary | "/" unary)*
- * unary      = ("+" | "-")? primary
- * primary    = num
- *            | ident ("(" ")")?
- *            | "(" expr ")"
- **/
-
 Token* token;
 Node* code[100];
 LVar* locals;
@@ -129,6 +109,13 @@ int expect_number(void) {
 
 LVar* find_lvar(Token* tok) {
   for (LVar* var = locals; var; var = var->next)
+    if (var->len == tok->len && !memcmp(tok->str, var->name, var->len))
+      return var;
+  return NULL;
+}
+
+Function* find_func(Token* tok) {
+  for (Function* var = locals; var; var = var->next)
     if (var->len == tok->len && !memcmp(tok->str, var->name, var->len))
       return var;
   return NULL;
@@ -367,33 +354,41 @@ Node* unary(void) {
   return primary();
 }
 
-// primary = num | ident ("(" ")")? | "(" expr ")"
+/** primary = num
+ *          | ident ("(" ")")?
+ *          | "(" expr ")"
+ */
 Node* primary(void) {
-  Token* tok = consume_ident();
-  if (tok) {
-    Node* node = calloc(1, sizeof(Node));
-    node->kind = ND_LVAR;
-
-    LVar* lvar = find_lvar(tok);
-    if (lvar) {
-      node->offset = lvar->offset;
-    } else {
-      lvar = calloc(1, sizeof(LVar));
-      lvar->next = locals;
-      lvar->name = tok->str;
-      lvar->len = tok->len;
-      lvar->offset = locals->offset + 8;
-      node->offset = lvar->offset;
-      locals = lvar;
-    }
-    return node;
-  }
-
   if (consume("(")) {
     Node* node = expr();
     expect(")");
     return node;
   }
 
-  return new_node_num(expect_number());
+  Token* tok = consume_ident();
+  if (!tok) return new_node_num(expect_number());
+
+  Node* node;
+  if (consume("(")) {
+    node = calloc(1, sizeof(Node));
+    node->kind = ND_FUNC_CALL;
+    expect(")");
+    return node;
+  }
+
+  node = calloc(1, sizeof(Node));
+  node->kind = ND_LVAR;
+  LVar* lvar = find_lvar(tok);
+  if (lvar) {
+    node->offset = lvar->offset;
+  } else {
+    lvar = calloc(1, sizeof(LVar));
+    lvar->next = locals;
+    lvar->name = tok->str;
+    lvar->len = tok->len;
+    lvar->offset = locals->offset + 8;
+    node->offset = lvar->offset;
+    locals = lvar;
+  }
+  return node;
 }

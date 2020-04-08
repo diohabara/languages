@@ -83,6 +83,8 @@ void gen(Node* node) {
       }
       printf("  push rax\n");
       return;
+    case ND_FUNC_CALL:  // ident ()
+      return;
   }
 
   gen(node->lhs);

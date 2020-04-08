@@ -59,17 +59,18 @@ struct Vector {
 };
 // node of AST
 struct Node {
-  Vector* stmts;  // for ND_BLOCK
-  NodeKind kind;  // type of Node
-  Node* lhs;      // left hand side
-  Node* rhs;      // right hand side
-  Node* cond;     // condition
-  Node* then;     // then
-  Node* els;      // else
-  Node* init;     // initilization
-  Node* step;     // step
-  int val;        // for ND_NUM
-  int offset;     // ND_LVAR
+  Vector* stmts;    // for ND_BLOCK
+  NodeKind kind;    // type of Node
+  Node* lhs;        // left hand side
+  Node* rhs;        // right hand side
+  Node* cond;       // condition
+  Node* then;       // then
+  Node* els;        // else
+  Node* init;       // initilization
+  Node* step;       // step
+  char* func_name;  // for Function
+  int val;          // for ND_NUM
+  int offset;       // ND_LVAR
 };
 // local variables
 struct LVar {
@@ -78,11 +79,13 @@ struct LVar {
   int len;     // the length of the name
   int offset;  // offset from RBP
 };
-// functioin
-struct Fucntion {
-  // TODO: fill this
+// function variables
+struct Function {
+  Function* next;
+  Node* node;
+  int len;
+  char* name;
 };
-
 // current token
 extern Token* token;
 // input program

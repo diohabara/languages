@@ -80,9 +80,10 @@ try 10 "{ a = 0; for (i = 1; i <= 10; i = i + 1) { a = i; } a; }"
 
 start_test "step14: calling function"
 echo "~~~function without arguments~~~"
-try 127 "main();"
-try 127 "hoge();"
+try 0 "main();"
+try 0 "hoge();"
 
 echo "~~~function with arguments~~~"
+
 
 echo OK
